@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { OrganizationSwitcher } from '@clerk/nextjs';
 import { UserButton } from '@clerk/nextjs';
 import MobileSidebar from './mobile-sidebar';
+import { FromPopOver } from '@/components/form/form-popover';
 
 function Navbar() {
   return (
@@ -13,20 +14,24 @@ function Navbar() {
         <div className='hidden md:flex'>
           <Logo />
         </div>
-        <Button
-          size='sm'
-          className='rounded-sm hidden md:block h-auto py-1.5 px-2'
-          variant='primary'
-        >
-          Create
-        </Button>
-        <Button
-          size='sm'
-          variant='primary'
-          className='rounded-sm block md:hidden'
-        >
-          <Plus className='h-4 w-4' />
-        </Button>
+        <FromPopOver align='start' side='bottom' sideOffSet={18}>
+          <Button
+            size='sm'
+            className='rounded-sm hidden md:block h-auto py-1.5 px-2'
+            variant='primary'
+          >
+            Create
+          </Button>
+        </FromPopOver>
+        <FromPopOver align='start' side='bottom' sideOffSet={18}>
+          <Button
+            size='sm'
+            variant='primary'
+            className='rounded-sm block md:hidden'
+          >
+            <Plus className='h-4 w-4' />
+          </Button>
+        </FromPopOver>
       </div>
       <div className='ml-auto flex items-center gap-x-2'>
         <OrganizationSwitcher
