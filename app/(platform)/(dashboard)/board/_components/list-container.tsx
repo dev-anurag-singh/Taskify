@@ -5,6 +5,9 @@ import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import ListForm from './list-form';
 import { useEffect, useState } from 'react';
 import ListItem from './list-item';
+import { useAction } from '@/hooks/useAction';
+import { updateListOrder } from '@/actions/update-list-order';
+import toast from 'react-hot-toast';
 
 interface ListContainerProps {
   data: ListWithCards[];
@@ -20,6 +23,9 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 
 function ListContainer({ data, boardId }: ListContainerProps) {
   const [orderedData, setOrderedData] = useState(data);
+  const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
+    onSuccess: () => toast.success('List has been reordered'),
+  });
 
   useEffect(() => {
     setOrderedData(data);
@@ -50,6 +56,7 @@ function ListContainer({ data, boardId }: ListContainerProps) {
       setOrderedData(items);
 
       // Persist to DB
+      executeUpdateListOrder({ items, boardId });
     }
 
     // User moves a card
@@ -92,8 +99,6 @@ function ListContainer({ data, boardId }: ListContainerProps) {
         sourceList.card = reorderedCards;
 
         setOrderedData(newOrderedData);
-
-        //  TODO persist to DB
       } else {
         // Remove card from the source list
         const [movedCard] = sourceList.card.splice(source.index, 1);
