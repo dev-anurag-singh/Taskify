@@ -8,6 +8,7 @@ import ListItem from './list-item';
 import { useAction } from '@/hooks/useAction';
 import { updateListOrder } from '@/actions/update-list-order';
 import toast from 'react-hot-toast';
+import { updateCardOrder } from '@/actions/update-card-order';
 
 interface ListContainerProps {
   data: ListWithCards[];
@@ -25,6 +26,10 @@ function ListContainer({ data, boardId }: ListContainerProps) {
   const [orderedData, setOrderedData] = useState(data);
   const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
     onSuccess: () => toast.success('List has been reordered'),
+  });
+
+  const { execute: executeUpdateCardOrder } = useAction(updateCardOrder, {
+    onSuccess: () => toast.success('Card reordered'),
   });
 
   useEffect(() => {
@@ -99,6 +104,11 @@ function ListContainer({ data, boardId }: ListContainerProps) {
         sourceList.card = reorderedCards;
 
         setOrderedData(newOrderedData);
+
+        executeUpdateCardOrder({
+          items: reorderedCards,
+          boardId,
+        });
       } else {
         // Remove card from the source list
         const [movedCard] = sourceList.card.splice(source.index, 1);
@@ -120,6 +130,11 @@ function ListContainer({ data, boardId }: ListContainerProps) {
 
         setOrderedData(newOrderedData);
         //Persist to DB
+
+        executeUpdateCardOrder({
+          boardId,
+          items: destList.card,
+        });
       }
     }
   };
