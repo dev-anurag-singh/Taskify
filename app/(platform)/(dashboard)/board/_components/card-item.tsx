@@ -6,6 +6,9 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useQuery } from '@tanstack/react-query';
 import { CardWithList } from '@/types';
 import { fetcher } from '@/lib/fetcher';
+import { Header } from '@/components/card-modal/header';
+import { Description } from '@/components/card-modal/description';
+import { Actions } from '@/components/card-modal/actions';
 
 // import { useCardModal } from '@/hooks/use-card-modal';
 
@@ -15,7 +18,7 @@ interface CardItemProps {
 }
 
 export const CardItem = ({ data, index }: CardItemProps) => {
-  const { data: card } = useQuery<CardWithList>({
+  const { data: cardData } = useQuery<CardWithList>({
     queryKey: ['card', data.id],
     queryFn: () => fetcher(`/api/cards/${data.id}`),
   });
@@ -37,7 +40,21 @@ export const CardItem = ({ data, index }: CardItemProps) => {
           </DialogTrigger>
         )}
       </Draggable>
-      <DialogContent>{card?.title}</DialogContent>
+      <DialogContent>
+        {!cardData ? <Header.Skeleton /> : <Header data={cardData} />}
+        <div className='grid grid-cols-1 md:grid-cols-4 md:gap-4'>
+          <div className='col-span-3'>
+            <div className='w-full space-y-6'>
+              {!cardData ? (
+                <Description.Skeleton />
+              ) : (
+                <Description data={cardData} />
+              )}
+            </div>
+          </div>
+          {!cardData ? <Actions.Skeleton /> : <Actions data={cardData} />}
+        </div>
+      </DialogContent>
     </Dialog>
   );
 };
