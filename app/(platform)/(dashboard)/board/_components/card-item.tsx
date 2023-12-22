@@ -23,7 +23,7 @@ export const CardItem = ({ data, index }: CardItemProps) => {
     queryKey: ['card', data.id],
     queryFn: () => fetcher(`/api/cards/${data.id}`),
   });
-  const { data: cardAuditData } = useQuery<AuditLog>({
+  const { data: cardAuditData } = useQuery<AuditLog[]>({
     queryKey: ['card-logs', data.id],
     queryFn: () => fetcher(`/api/cards/${data.id}/logs`),
   });
