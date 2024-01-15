@@ -11,7 +11,6 @@ import { Description } from '@/components/card-modal/description';
 import { Actions } from '@/components/card-modal/actions';
 import { Activity } from '@/components/card-modal/activity';
 
-// import { useCardModal } from '@/hooks/use-card-modal';
 
 interface CardItemProps {
   data: Card;
